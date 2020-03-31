@@ -1,0 +1,54 @@
+﻿@model Ameliorated_Communications.Models.Fund
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Fund</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="FundId" />
+            <div class="form-group">
+                <label asp-for="DailyFunds" class="control-label"></label>
+                <input asp-for="DailyFunds" class="form-control" />
+                <span asp-validation-for="DailyFunds" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WeeklyFunds" class="control-label"></label>
+                <input asp-for="WeeklyFunds" class="form-control" />
+                <span asp-validation-for="WeeklyFunds" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MonthlyFunds" class="control-label"></label>
+                <input asp-for="MonthlyFunds" class="form-control" />
+                <span asp-validation-for="MonthlyFunds" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="QuarterlyFunds" class="control-label"></label>
+                <input asp-for="QuarterlyFunds" class="form-control" />
+                <span asp-validation-for="QuarterlyFunds" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="YearlyFunds" class="control-label"></label>
+                <input asp-for="YearlyFunds" class="form-control" />
+                <span asp-validation-for="YearlyFunds" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
