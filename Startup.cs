@@ -32,7 +32,7 @@ namespace Ameliorated_Communications
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews(); 
         services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
@@ -49,7 +49,7 @@ namespace Ameliorated_Communications
                 options.LogoutPath = $"/Identity/Account/Logout";
                 options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
             });
-            services.AddSingleton<Microsoft.AspNetCore.Identity.UI.Services.IEmailSender>(); //mic docs wants EmailSender also, won't register due to protection level 
+           // services.AddSingleton<IEmailSender, IEmailSender>(); //mic docs wants EmailSender also, won't register due to protection level also i don't 100% need this 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
