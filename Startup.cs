@@ -32,28 +32,15 @@ namespace Ameliorated_Communications
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                  .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            services.AddControllersWithViews(); 
-        services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
-        .AddRazorPagesOptions(options =>
-        {
-            //options.AllowAreas = true;
-            options.Conventions.AuthorizeAreaFolder("Identity", "/Account/Manage");
-            options.Conventions.AuthorizeAreaPage("Identity", "/Account/Logout");
-             });
-
-            services.ConfigureApplicationCookie(options =>
-            {
-                options.LoginPath = $"/Identity/Account/Login";
-                options.LogoutPath = $"/Identity/Account/Logout";
-                options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
-            });
-           // services.AddSingleton<IEmailSender, IEmailSender>(); //mic docs wants EmailSender also, won't register due to protection level also i don't 100% need this 
+          
+            services.AddControllersWithViews();
+            services.AddRazorPages();
         }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider services)
         {
             if (env.IsDevelopment())
             {
@@ -63,7 +50,6 @@ namespace Ameliorated_Communications
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
@@ -81,6 +67,29 @@ namespace Ameliorated_Communications
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+            CreateRoles(services).Wait();
+        }
+
+        private async Task CreateRoles(IServiceProvider serviceProvider)
+        {
+            var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var UserManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+            IdentityResult roleResult;
+
+            var roleCheck = await RoleManager.RoleExistsAsync("Manager");
+            if(!roleCheck)
+            {
+                roleResult = await RoleManager.CreateAsync(new IdentityRole("Manager"));
+            }
+
+            //Assign Manager or Admin Roles here 
+            IdentityUser user = await UserManager.FindByEmailAsync("Ali@gmail.com");
+
+            var User = new IdentityUser();
+
+            await UserManager.AddToRoleAsync(User, "Manager");
+
         }
     }
 }
