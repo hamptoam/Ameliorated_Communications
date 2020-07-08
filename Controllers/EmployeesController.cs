@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Ameliorated_Communications.Data;
 using Ameliorated_Communications.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Ameliorated_Communications.Controllers
 {
+    [Authorize(Roles = "Employee")]
     public class EmployeesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -18,11 +20,10 @@ namespace Ameliorated_Communications.Controllers
         {
             _context = context;
         }
-
         // GET: Employees
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Employee.ToListAsync());
+            return View();
         }
 
         // GET: Employees/Details/5

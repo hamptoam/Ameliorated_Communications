@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Ameliorated_Communications.Data;
 using Ameliorated_Communications.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Ameliorated_Communications.Controllers
 {
+    [Authorize(Roles="Manager")]
     public class ManagersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -20,9 +22,9 @@ namespace Ameliorated_Communications.Controllers
         }
 
         // GET: Managers
-        public async Task<IActionResult> Index()
+        public  async Task<IActionResult> Index()
         {
-            return View(await _context.Manager.ToListAsync());
+            return View();
         }
 
         // GET: Managers/Details/5
@@ -49,9 +51,6 @@ namespace Ameliorated_Communications.Controllers
             return View();
         }
 
-        // POST: Managers/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ManagerId,firstName,lastName")] Manager manager)
